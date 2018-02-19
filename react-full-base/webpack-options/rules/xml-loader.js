@@ -1,4 +1,6 @@
-module.exports = {
-  test: /\.xml$/,
-  use: ['xml-loader']
+module.exports = function() {
+  return {
+    test: /\.xml$/,
+    use: ['xml-loader']
+  };
 };

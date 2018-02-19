@@ -1,5 +1,5 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-module.exports = function(path) {
-  return new CleanWebpackPlugin([path]);
+module.exports = function(env, { distFolder }) {
+  return new CleanWebpackPlugin([distFolder]);
 };

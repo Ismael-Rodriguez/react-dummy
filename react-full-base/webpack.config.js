@@ -2,13 +2,35 @@ const path = require('path');
 
 const paths = require('./webpack-options/paths');
 
+// process.env.NODE_ENV  production / undefined
+webPackOptions = require('./webpack-options')(process.env.NODE_ENV);
+
 webPackConfig = {};
 
 webPackConfig.entry = paths.entry;
 
-webPackConfig.output = {
-  filename: paths.bundleFileName,
-  path: path.resolve(__dirname, paths.distFolder)
+// #############################################################################
+// OUTPUT
+// #############################################################################
+webPackConfig.output = {};
+
+let output = webPackConfig.output;
+
+let outPutConfig = webPackOptions.output;
+
+Object.keys(outPutConfig).forEach(key => {
+  if (outPutConfig[key].active)
+    Object.assign(webPackConfig.output, ...outPutConfig[key].config);
+});
+// #############################################################################
+// OUTPUT END
+// #############################################################################
+
+webPackConfig.devtool = 'inline-source-map';
+
+webPackConfig.devServer = {
+  // npm install --save-dev webpack-dev-server
+  contentBase: path.resolve(__dirname, paths.distFolder)
 };
 
 // #############################################################################
@@ -18,14 +40,13 @@ webPackConfig.plugins = [];
 
 let plugins = webPackConfig.plugins;
 
-let pluginsConfig = require('./webpack-options').plugins;
+let pluginsConfig = webPackOptions.plugins;
 
 Object.keys(pluginsConfig).forEach(key => {
-  if (pluginsConfig[key].active) plugins.push(pluginsConfig[key].config);
+  if (pluginsConfig[key].active) plugins.push(...pluginsConfig[key].config);
 });
-
 // #############################################################################
-// END PLUGINS
+// PLUGINS END
 // #############################################################################
 
 webPackConfig.module = {};
@@ -37,14 +58,13 @@ webPackConfig.module.rules = [];
 
 let rules = webPackConfig.module.rules;
 
-let rulesConfig = require('./webpack-options').rules;
+let rulesConfig = webPackOptions.rules;
 
 Object.keys(rulesConfig).forEach(key => {
-  if (rulesConfig[key].active) rules.push(rulesConfig[key].config);
+  if (rulesConfig[key].active) rules.push(...rulesConfig[key].config);
 });
-
 // #############################################################################
-// END RULES
+// RULES END
 // #############################################################################
 
 module.exports = webPackConfig;
