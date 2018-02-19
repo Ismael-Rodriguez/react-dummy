@@ -1,26 +1,50 @@
 const path = require('path');
 
-const paths = {
-  entry: './src/index.js',
-  bundleFileName: 'bundle.js',
-  distFolder: 'dist'
+const paths = require('./webpack-options/paths');
+
+webPackConfig = {};
+
+webPackConfig.entry = paths.entry;
+
+webPackConfig.output = {
+  filename: paths.bundleFileName,
+  path: path.resolve(__dirname, paths.distFolder)
 };
 
-module.exports = {
-  entry: paths.entry,
-  output: {
-    filename: paths.bundleFileName,
-    path: path.resolve(__dirname, paths.distFolder)
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        // npm install css-loader
-        // npm install style-loader
-        // se creará un tag <style> con el css que importemos
-        use: ['style-loader', 'css-loader']
-      }
-    ]
-  }
-};
+// #############################################################################
+// PLUGINS
+// #############################################################################
+webPackConfig.plugins = [];
+
+let plugins = webPackConfig.plugins;
+
+let pluginsConfig = require('./webpack-options').plugins;
+
+Object.keys(pluginsConfig).forEach(key => {
+  if (pluginsConfig[key].active) plugins.push(pluginsConfig[key].config);
+});
+
+// #############################################################################
+// END PLUGINS
+// #############################################################################
+
+webPackConfig.module = {};
+
+// #############################################################################
+// RULES
+// #############################################################################
+webPackConfig.module.rules = [];
+
+let rules = webPackConfig.module.rules;
+
+let rulesConfig = require('./webpack-options').rules;
+
+Object.keys(rulesConfig).forEach(key => {
+  if (rulesConfig[key].active) rules.push(rulesConfig[key].config);
+});
+
+// #############################################################################
+// END RULES
+// #############################################################################
+
+module.exports = webPackConfig;
