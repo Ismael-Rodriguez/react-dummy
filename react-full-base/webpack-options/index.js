@@ -9,7 +9,7 @@ const paths = require('./paths.js');
   packages    - paquetes que se necesitan instalar para esta opción
 */
 
-module.exports = function(env) {
+module.exports = function(env, dirname) {
   return {
     rules: {
       css_classic: {
@@ -81,9 +81,38 @@ module.exports = function(env) {
           require('./output/filename')(env, {
             bundleFileName: paths.bundleFileName
           }),
-          require('./output/path')(env, { distFolder: paths.distFolder })
+          require('./output/path')(env, {
+            distFolder: paths.distFolder,
+            dirname
+          })
         ],
         packages: []
+      }
+    },
+    devtool: {
+      conf: {
+        active: true,
+        config: [require('./devtool')(env, {})],
+        packages: []
+      }
+    },
+    entry: {
+      conf: {
+        active: true,
+        config: [require('./entry')(env, { entry: paths.entry })],
+        packages: []
+      }
+    },
+    devServer: {
+      conf: {
+        active: true,
+        config: [
+          require('./devServer/contentBase')(env, {
+            distFolder: paths.distFolder,
+            dirname
+          })
+        ],
+        packages: ['webpack-dev-server']
       }
     }
   };
