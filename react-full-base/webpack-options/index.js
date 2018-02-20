@@ -18,7 +18,7 @@ module.exports = function(env, dirname) {
         // la forma de usarlo es utilizar las clases declaradas en el css
         active: true,
         config: [require('./rules/css-classic')(env, {})],
-        packages: ['css-loader', 'style-loader']
+        packages: ['css-loader', 'style-loader', 'extract-text-webpack-plugin']
       },
       image_loader: {
         // png|svg|jpg|gif
@@ -50,7 +50,10 @@ module.exports = function(env, dirname) {
         // borra el contenido del directorio especificado
         active: true,
         config: [
-          require('./plugins/clean')(env, { distFolder: paths.distFolder })
+          require('./plugins/clean')(env, {
+            dirname,
+            distFolder: paths.distFolder
+          })
         ],
         packages: ['clean-webpack-plugin']
       },
@@ -72,6 +75,15 @@ module.exports = function(env, dirname) {
         active: true,
         config: [require('./plugins/uglify')(env, {})],
         packages: ['uglifyjs-webpack-plugin']
+      },
+      extractTextPlugin: {
+        active: true,
+        config: [
+          require('./plugins/extractTextPlugin')(env, {
+            styleFileName: paths.styleFileName
+          })
+        ],
+        packages: ['extract-text-webpack-plugin']
       }
     },
     output: {

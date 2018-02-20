@@ -1,6 +1,3 @@
-const path = require('path');
-
-const paths = require('./webpack-options/paths');
 const helpers = require('./webpack-options/helpers');
 
 // process.env.NODE_ENV  = production || undefined
