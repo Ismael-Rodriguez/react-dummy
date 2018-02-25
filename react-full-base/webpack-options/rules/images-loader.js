@@ -1,6 +1,16 @@
 module.exports = function() {
   return {
-    test: /\.(png|svg|jpg|gif)$/,
-    use: ['file-loader']
+    // png|svg|jpg|gif
+    result: {
+      module: {
+        rules: [
+          {
+            test: /\.(png|svg|jpg|gif)$/,
+            use: ['file-loader']
+          }
+        ]
+      }
+    },
+    packages: ['file-loader']
   };
 };

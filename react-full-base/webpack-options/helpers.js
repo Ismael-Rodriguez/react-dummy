@@ -1,25 +1,35 @@
-const objResult = configObj => {
-  let result = {};
-  Object.keys(configObj).forEach(key => {
-    if (configObj[key].active) Object.assign(result, ...configObj[key].config);
+function iterateWebpackConfig(webpackConfig, configuredChunks, resultObj) {
+  Object.keys(webpackConfig).forEach(isActive => {
+    if (webpackConfig[isActive]) {
+      iterateObj(configuredChunks[isActive]['result'], resultObj);
+    }
   });
-  return result;
-};
+}
 
-const arrayResult = configObj => {
-  let result = [];
-  Object.keys(configObj).forEach(key => {
-    if (configObj[key].active) result.push(...configObj[key].config);
+function iterateObj(configObj, resultObj) {
+  Object.keys(configObj).forEach(confKey => {
+    if (isUndefined(resultObj[confKey])) {
+      resultObj[confKey] = configObj[confKey];
+    } else if (isArray(resultObj[confKey])) {
+      resultObj[confKey].push(...configObj[confKey]);
+    } else if (!isObject(resultObj[confKey])) {
+      resultObj[confKey] = configObj[confKey];
+    } else if (isObject(resultObj[confKey])) {
+      iterateObj(configObj[confKey], resultObj[confKey]);
+    }
   });
-  return result;
-};
+}
 
-const stringResult = configObj => {
-  let result = [];
-  Object.keys(configObj).forEach(key => {
-    if (configObj[key].active) result = configObj[key].config[0];
-  });
-  return result;
-};
+function isUndefined(testUndefined) {
+  return Object.prototype.toString.call(testUndefined) === '[object Undefined]';
+}
 
-module.exports = { objResult, arrayResult, stringResult };
+function isArray(testArray) {
+  return Object.prototype.toString.call(testArray) === '[object Array]';
+}
+
+function isObject(testObject) {
+  return Object.prototype.toString.call(testObject) === '[object Object]';
+}
+
+module.exports = { iterateWebpackConfig };

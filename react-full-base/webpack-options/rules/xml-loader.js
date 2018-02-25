@@ -1,6 +1,16 @@
 module.exports = function() {
   return {
-    test: /\.xml$/,
-    use: ['xml-loader']
+    // xml
+    result: {
+      module: {
+        rules: [
+          {
+            test: /\.xml$/,
+            use: ['xml-loader']
+          }
+        ]
+      }
+    },
+    packages: ['xml-loader']
   };
 };

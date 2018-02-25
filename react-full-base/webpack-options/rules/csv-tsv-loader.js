@@ -1,6 +1,16 @@
 module.exports = function() {
   return {
-    test: /\.(csv|tsv)$/,
-    use: ['csv-loader']
+    // csv|tsv
+    result: {
+      module: {
+        rules: [
+          {
+            test: /\.(csv|tsv)$/,
+            use: ['csv-loader']
+          }
+        ]
+      }
+    },
+    packages: ['csv-loader']
   };
 };

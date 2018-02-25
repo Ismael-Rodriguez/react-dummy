@@ -1,4 +1,12 @@
 module.exports = function(env) {
-  if (env) return 'source-map';
-  else return 'inline-source-map';
+  return {
+    // devtool puede ser un string que indica el tipo de devtool o false
+    result: {
+      devtool: (() => {
+        if (env === 'production') return 'source-map';
+        else return 'inline-source-map';
+      })()
+    },
+    packages: []
+  };
 };

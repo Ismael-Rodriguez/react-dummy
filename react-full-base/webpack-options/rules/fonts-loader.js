@@ -1,6 +1,16 @@
 module.exports = function() {
   return {
-    test: /\.(woff|woff2|eot|ttf|otf)$/,
-    use: ['file-loader']
+    // woff|woff2|eot|ttf|otf
+    result: {
+      module: {
+        rules: [
+          {
+            test: /\.(woff|woff2|eot|ttf|otf)$/,
+            use: ['file-loader']
+          }
+        ]
+      }
+    },
+    packages: ['file-loader']
   };
 };
